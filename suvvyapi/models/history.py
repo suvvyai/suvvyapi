@@ -11,7 +11,7 @@ class FunctionDetails(BaseModel):
 
 class Message(BaseModel):
     text: str = Field(default="", description="Message text, function result")
-    role: Literal["human", "ai", "function_result", "function_call"]
+    role: Literal["human", "ai", "function_result", "function_call"] = "human"
     function: Optional[FunctionDetails] = Field(default=None,
                                                 description="Needed for functions. Unused if role != \"function_*\".")
 
