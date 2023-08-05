@@ -84,3 +84,8 @@ class SuvvyAPIWrapper:
         json = response.json()
         prediction = Prediction(**json)
         return prediction
+
+    def predict(self, message: Message | list[Message], unique_id: str, pass_ai_as_employee: bool = True, placeholders: Optional[dict] = {}, auto_insert_ai: bool = True, custom_log_info: Optional[dict] = {}, raise_if_dialog_stopped: bool = False):
+        self.add_message(message, unique_id, pass_ai_as_employee)
+
+        return self.predict_from_history(unique_id, placeholders, auto_insert_ai, custom_log_info, raise_if_dialog_stopped)
