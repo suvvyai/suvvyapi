@@ -1,4 +1,4 @@
-# An API wrapper for Suvvy AI
+# An async API wrapper for Suvvy AI
 
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/suvvyapi.svg?style=flat-square&logo=python&logoColor=FFE873)](https://pypi.org/project/suvvyapi)
 [![PyPI version](https://img.shields.io/pypi/v/suvvyapi.svg?style=flat-square&logo=pypi&logoColor=FFE873)](https://pypi.org/project/aiogram-translation)
@@ -11,13 +11,29 @@
 pip install -U suvvyapi 
 ```
 
-## Usage
+## Synchronous Usage
 ```python
 from suvvyapi import SuvvyAPIWrapper, Message
 
 suvvy = SuvvyAPIWrapper("YOUR_TOKEN")
-# You can get your token on https://home.suvvy.ai/
+# You can get your token at https://home.suvvy.ai/
 
 response = suvvy.predict(Message(text="Say hello to Python!"), "random_id")
 # 'Hello!'
+```
+
+## Asynchronous Usage
+
+```python
+import asyncio
+from suvvyapi import AsyncSuvvyAPIWrapper, Message
+
+suvvy = AsyncSuvvyAPIWrapper("YOUR_TOKEN")
+# You can get your token at https://home.suvvy.ai/
+
+async def main():
+    response = suvvy.predict(Message(text="Say hello to Python!"), "random_id")
+    # 'Hello!'
+
+asyncio.run(main())
 ```
