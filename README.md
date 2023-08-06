@@ -1,5 +1,5 @@
 # An async API wrapper for Suvvy AI
-
+#### built on top of httpx and pydantic :)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/suvvyapi.svg?style=flat-square&logo=python&logoColor=FFE873)](https://pypi.org/project/suvvyapi)
 [![PyPI version](https://img.shields.io/pypi/v/suvvyapi.svg?style=flat-square&logo=pypi&logoColor=FFE873)](https://pypi.org/project/suvvyapi)
 [![PyPI downloads](https://img.shields.io/pypi/dm/suvvyapi.svg?style=flat-square)](https://pypi.org/project/suvvyapi)
