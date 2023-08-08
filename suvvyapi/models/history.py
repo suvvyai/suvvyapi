@@ -3,6 +3,8 @@ from typing import Literal, Optional
 
 from pydantic import BaseModel, Field
 
+from suvvyapi.enums import Role
+
 
 class FunctionDetails(BaseModel):
     name: str
@@ -11,7 +13,7 @@ class FunctionDetails(BaseModel):
 
 class Message(BaseModel):
     text: str = Field(default="", description="Message text, function result")
-    role: Literal["human", "ai", "function_result", "function_call"] = "human"
+    role: Role = Role.HUMAN
     function: Optional[FunctionDetails] = Field(default=None,
                                                 description="Needed for functions. Unused if role != \"function_*\".")
 
