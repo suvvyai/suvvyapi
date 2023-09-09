@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Literal, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 from suvvyapi.enums import Role
 
@@ -12,6 +12,8 @@ class FunctionDetails(BaseModel):
 
 
 class Message(BaseModel):
+    model_config = ConfigDict(use_enum_values=True)
+
     text: str = Field(default="", description="Message text, function result")
     role: Role = Role.HUMAN
     function: Optional[FunctionDetails] = Field(default=None,
