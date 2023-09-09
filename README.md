@@ -4,7 +4,8 @@
 [![PyPI version](https://img.shields.io/pypi/v/suvvyapi.svg?style=flat-square&logo=pypi&logoColor=FFE873)](https://pypi.org/project/suvvyapi)
 [![PyPI downloads](https://img.shields.io/pypi/dm/suvvyapi.svg?style=flat-square)](https://pypi.org/project/suvvyapi)
 
-[![suvvy.ai](https://img.shields.io/badge/suvvy.ai-best%20AI%20website-blue?style=flat-square)](https://suvvy.ai)
+[![Suvvy AI](https://img.shields.io/badge/suvvy.ai-best%20AI%20website-blue?style=flat-square)](https://suvvy.ai)
+[![Static Badge](https://img.shields.io/badge/OpenAI-ChatGPT-blue?style=flat-square&logo=openai)](https://openai.com/chatgpt)
 
 ## Installation
 ```shell
