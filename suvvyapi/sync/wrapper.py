@@ -45,6 +45,12 @@ class SuvvyAPIWrapper:
         if not isinstance(message, list):
             message = [message]
 
+        _ms = []
+        for m in message:
+            _ms.append(m.model_dump())
+
+        message = _ms
+
         body = {
             "messages": message,
             "pass_ai_as_employee": pass_ai_as_employee
