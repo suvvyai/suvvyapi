@@ -37,3 +37,11 @@ async def main():
 
 asyncio.run(main())
 ```
+
+### Building from sources
+```shell
+git clone https://github.com/barabum0/suvvyapi
+cd suvvyapi
+pip install -r requirements.txt
+python -m build
+```
