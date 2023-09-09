@@ -2,7 +2,7 @@ from typing import Literal, Optional
 import httpx
 from devtools import debug
 
-from suvvyapi.exceptions.api import InvalidAPITokenError, NegativeBalanceError, DialogStoppedError, \
+from suvvyapi.exceptions.api import InvalidAPITokenError, NegativeBalanceError, HistoryStoppedError, \
     HistoryNotFoundError, HistoryTooLongError, MessageLimitExceededError, UnknownAPIError, InternalAPIError
 from suvvyapi.models.history import History, Message
 from suvvyapi.models.responses import Prediction
@@ -64,7 +64,7 @@ class AsyncSuvvyAPIWrapper:
         match response.status_code:
             case 202:
                 if raise_if_dialog_stopped:
-                    raise DialogStoppedError("History is marked as stopped")
+                    raise HistoryStoppedError("History is marked as stopped")
                 else:
                     prediction = Prediction()
                     return prediction

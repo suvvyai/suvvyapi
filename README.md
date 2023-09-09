@@ -32,7 +32,7 @@ suvvy = AsyncSuvvyAPIWrapper("YOUR_TOKEN")
 # You can get your token at https://home.suvvy.ai/
 
 async def main():
-    response = suvvy.predict(Message(text="Say hello to Python!"), "random_id")
+    response = await suvvy.predict(Message(text="Say hello to Python!"), "random_id")
     # 'Hello!'
 
 asyncio.run(main())
