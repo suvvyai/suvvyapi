@@ -66,7 +66,7 @@ class AsyncSuvvyAPIWrapper:
             "custom_log_info": custom_log_info,
             "auto_insert_ai": auto_insert_ai
         }
-        response = await self._make_request(method="POST", path=f"/api/v1/history/message?unique_id={unique_id}", body=body)
+        response = await self._make_request(method="POST", path=f"/api/v1/history/predict?unique_id={unique_id}", body=body)
         match response.status_code:
             case 202:
                 if raise_if_dialog_stopped:
@@ -92,6 +92,48 @@ class AsyncSuvvyAPIWrapper:
         return prediction
 
     async def predict(self, message: Message | list[Message], unique_id: str, pass_ai_as_employee: bool = True, placeholders: Optional[dict] = {}, auto_insert_ai: bool = True, custom_log_info: Optional[dict] = {}, raise_if_dialog_stopped: bool = False):
-        await self.add_message(message, unique_id, pass_ai_as_employee)
+        custom_log_info = dict(**self.custom_log_info, **custom_log_info)
+        placeholders = dict(**self.placeholders, **placeholders)
 
-        return await self.predict_from_history(unique_id, placeholders, auto_insert_ai, custom_log_info, raise_if_dialog_stopped)
+        if not isinstance(message, list):
+            message = [message]
+
+        _ms = []
+        for m in message:
+            _ms.append(m.model_dump())
+
+        message = _ms
+
+        body = {
+            "placeholders": placeholders,
+            "custom_log_info": custom_log_info,
+            "auto_insert_ai": auto_insert_ai,
+            "messages": message,
+            "pass_ai_as_employee": pass_ai_as_employee
+        }
+        response = await self._make_request(method="POST", path=f"/api/v1/history/message/predict?unique_id={unique_id}",
+                                            body=body)
+        match response.status_code:
+            case 202:
+                if raise_if_dialog_stopped:
+                    raise HistoryStoppedError("History is marked as stopped")
+                else:
+                    prediction = Prediction()
+                    return prediction
+            case 404:
+                raise HistoryNotFoundError()
+            case 413:
+                json = response.json()
+                detail = json["detail"]
+                if detail.startswith("Maximum token limit"):
+                    raise HistoryTooLongError("History is too long to process")
+                else:
+                    raise MessageLimitExceededError("Message limit for that instance is exceeded")
+            case 200:
+                pass
+            case _:
+                raise UnknownAPIError(f"We don't know what happened. Status code is {response.status_code}")
+
+        json = response.json()
+        prediction = Prediction(**json)
+        return prediction
