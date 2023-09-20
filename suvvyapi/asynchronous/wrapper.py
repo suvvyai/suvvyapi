@@ -5,7 +5,7 @@ from devtools import debug
 from suvvyapi.exceptions.api import InvalidAPITokenError, NegativeBalanceError, HistoryStoppedError, \
     HistoryNotFoundError, HistoryTooLongError, MessageLimitExceededError, UnknownAPIError, InternalAPIError
 from suvvyapi.models.history import History, Message
-from suvvyapi.models.responses import Prediction
+from suvvyapi.models.responses import HistoryPrediction
 
 
 class AsyncSuvvyAPIWrapper:
@@ -57,7 +57,7 @@ class AsyncSuvvyAPIWrapper:
         }
         response = await self._make_request(method="POST", path=f"/api/v1/history/message?unique_id={unique_id}", body=body)
 
-    async def predict_from_history(self, unique_id: str, placeholders: Optional[dict] = {}, auto_insert_ai: bool = True, custom_log_info: Optional[dict] = {}, raise_if_dialog_stopped: bool = False) -> Prediction:
+    async def predict_from_history(self, unique_id: str, placeholders: Optional[dict] = {}, auto_insert_ai: bool = True, custom_log_info: Optional[dict] = {}, raise_if_dialog_stopped: bool = False) -> HistoryPrediction:
         custom_log_info = dict(**self.custom_log_info, **custom_log_info)
         placeholders = dict(**self.placeholders, **placeholders)
 
@@ -72,7 +72,7 @@ class AsyncSuvvyAPIWrapper:
                 if raise_if_dialog_stopped:
                     raise HistoryStoppedError("History is marked as stopped")
                 else:
-                    prediction = Prediction()
+                    prediction = HistoryPrediction()
                     return prediction
             case 404:
                 raise HistoryNotFoundError()
@@ -88,7 +88,7 @@ class AsyncSuvvyAPIWrapper:
                 raise UnknownAPIError(f"We don't know what happened. Status code is {response.status_code}")
 
         json = response.json()
-        prediction = Prediction(**json)
+        prediction = HistoryPrediction(**json)
         return prediction
 
     async def predict(self, message: Message | list[Message], unique_id: str, pass_ai_as_employee: bool = True, placeholders: Optional[dict] = {}, auto_insert_ai: bool = True, custom_log_info: Optional[dict] = {}, raise_if_dialog_stopped: bool = False):
@@ -118,7 +118,7 @@ class AsyncSuvvyAPIWrapper:
                 if raise_if_dialog_stopped:
                     raise HistoryStoppedError("History is marked as stopped")
                 else:
-                    prediction = Prediction()
+                    prediction = HistoryPrediction()
                     return prediction
             case 404:
                 raise HistoryNotFoundError()
@@ -135,5 +135,5 @@ class AsyncSuvvyAPIWrapper:
                 raise UnknownAPIError(f"We don't know what happened. Status code is {response.status_code}")
 
         json = response.json()
-        prediction = Prediction(**json)
+        prediction = HistoryPrediction(**json)
         return prediction

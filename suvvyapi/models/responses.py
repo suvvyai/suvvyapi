@@ -2,7 +2,7 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-from suvvyapi.models.history import HistoryMessage
+from suvvyapi.models.history import HistoryMessage, Message
 
 
 class TokenUsage(BaseModel):
@@ -25,12 +25,24 @@ class LLMResult(BaseModel):
     balance_usage: BalanceUsage = BalanceUsage()
 
 
-class Prediction(BaseModel):
+class HistoryPrediction(BaseModel):
     generation_info: LLMResult = LLMResult()
     new_messages: list[HistoryMessage] = []
 
     @property
     def actual_response(self) -> HistoryMessage | None:
+        if self.new_messages:
+            return self.new_messages[-1]
+        else:
+            return None
+
+
+class Prediction(BaseModel):
+    generation_info: LLMResult = LLMResult()
+    new_messages: list[Message] = []
+
+    @property
+    def actual_response(self) -> Message | None:
         if self.new_messages:
             return self.new_messages[-1]
         else:

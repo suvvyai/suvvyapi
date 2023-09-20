@@ -13,15 +13,7 @@ pip install -U suvvyapi
 ```
 
 ## Synchronous Usage
-```python
-from suvvyapi import SuvvyAPIWrapper, Message
-
-suvvy = SuvvyAPIWrapper("YOUR_TOKEN")
-# You can get your token at https://home.suvvy.ai/
-
-response = suvvy.predict(Message(text="Say hello to Python!"), "random_id")
-# 'Hello!'
-```
+No longer supported! Use
 
 ## Asynchronous Usage
 
