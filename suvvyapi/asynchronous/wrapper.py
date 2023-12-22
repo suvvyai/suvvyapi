@@ -1,16 +1,17 @@
 from typing import Literal, Optional
+
 import httpx
 from devtools import debug
 
 from suvvyapi.exceptions.api import (
-    InvalidAPITokenError,
-    NegativeBalanceError,
-    HistoryStoppedError,
     HistoryNotFoundError,
+    HistoryStoppedError,
     HistoryTooLongError,
-    MessageLimitExceededError,
-    UnknownAPIError,
     InternalAPIError,
+    InvalidAPITokenError,
+    MessageLimitExceededError,
+    NegativeBalanceError,
+    UnknownAPIError,
 )
 from suvvyapi.models.history import History, Message
 from suvvyapi.models.responses import Prediction
