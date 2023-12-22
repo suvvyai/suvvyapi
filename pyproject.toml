@@ -22,6 +22,7 @@ repository = "https://github.com/barabum0/suvvyapi"
 python = ">=3.10"
 httpx = "^0.26.0"
 pydantic = "^2.5.3"
+deprecation = "^2.1.0"
 
 [tool.poetry.group.dev.dependencies]
 devtools = "^0.12.2"
