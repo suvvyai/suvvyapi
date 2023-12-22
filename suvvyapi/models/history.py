@@ -16,8 +16,10 @@ class Message(BaseModel):
 
     text: str = Field(default="", description="Message text, function result")
     role: Role = Role.HUMAN
-    function: Optional[FunctionDetails] = Field(default=None,
-                                                description="Needed for functions. Unused if role != \"function_*\".")
+    function: Optional[FunctionDetails] = Field(
+        default=None,
+        description='Needed for functions. Unused if role != "function_*".',
+    )
 
 
 class HistoryMessage(Message):

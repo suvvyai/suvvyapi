@@ -35,4 +35,3 @@ class Prediction(BaseModel):
             return self.new_messages[-1]
         else:
             return None
-

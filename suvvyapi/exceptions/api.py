@@ -8,12 +8,15 @@ class InvalidAPITokenError(BaseException):
 
 class NegativeBalanceError(BaseException):
     """Raised, when your Suvvy AI balance is under zero"""
+
     balance: Optional[int] = None
 
     @classmethod
     def from_detail(cls, detail: str):
         exc = cls("Your balance is under zero")
-        balance = int(re.search(pattern="(\(\d*\))", string=detail).group(0).strip("()"))
+        balance = int(
+            re.search(pattern="(\(\d*\))", string=detail).group(0).strip("()")
+        )
         exc.balance = balance
         return exc
 
