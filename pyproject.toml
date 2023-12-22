@@ -5,6 +5,18 @@ description = "A Python API wrapper for Suvvy AI API"
 authors = ["Roman Poltorabatko <barabum@duck.com>"]
 license = "MIT"
 readme = "README.md"
+keywords = ["python", "wrapper", "chatgpt", "suvvy", "ai", "suvvyai"]
+classifiers = [
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules"
+]
+repository = "https://github.com/barabum0/suvvyapi"
 
 [tool.poetry.dependencies]
 python = ">=3.10"
