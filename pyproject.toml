@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "suvvyapi"
+version = "0.2"
+description = "A Python API wrapper for Suvvy AI API"
+authors = ["Roman Poltorabatko <barabum@duck.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.10"
+httpx = "^0.26.0"
+pydantic = "^2.5.3"
+
+[tool.poetry.group.dev.dependencies]
+devtools = "^0.12.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
