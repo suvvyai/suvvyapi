@@ -29,6 +29,14 @@ class HistoryNotFoundError(BaseException):
     """Raised, when history with this unique id is not found"""
 
 
+class MessageNotFoundError(BaseException):
+    """Raised, when message with this message_id is not found"""
+
+
+class InternalMessageAdded(BaseException):
+    """Raised, when message with internal role or role-specific information is added"""
+
+
 class HistoryTooLongError(BaseException):
     """Raised, when history is too long to process"""
 

@@ -1,5 +1,29 @@
 import httpx
 
+from suvvyapi.exceptions.api import (
+    InvalidAPITokenError,
+    NegativeBalanceError,
+    HistoryTooLongError,
+    InternalAPIError,
+    HistoryNotFoundError,
+    InternalMessageAdded,
+)
+
+
+def _handle_error(response: httpx.Response) -> None:
+    if response.status_code <= 299:
+        return
+
+    exceptions = {
+        401: InvalidAPITokenError,
+        402: NegativeBalanceError.from_detail,
+        406: InternalMessageAdded,
+        413: HistoryTooLongError,
+        404: HistoryNotFoundError,
+        500: InternalAPIError
+    }
+    raise exceptions[response.status_code](response.json().get("detail", None))
+
 
 class Suvvy(object):
     def __init__(
