@@ -70,8 +70,5 @@ class Suvvy(object):
             return r
 
     def check_connection(self) -> bool:
-        self._sync_request(
-            "GET",
-            "/api/check"
-        )
+        self._sync_request("GET", "/api/check")
         return True
