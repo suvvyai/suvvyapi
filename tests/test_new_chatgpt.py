@@ -27,3 +27,17 @@ async def test_aget_history():
         "pytest-2023-12-24T16:42:36.386464-ZSaKvG3D6VcLdV5sdJGl6UrYtJLgdC71G5kU29WYrmBpbg4qDi"
     )
     debug(r)
+
+
+def test_reset_history():
+    r = suvvy.reset_history(
+        "pytest-2023-12-24T16:42:36.386464-ZSaKvG3D6VcLdV5sdJGl6UrYtJLgdC71G5kU29WYrmBpbg4qDi"
+    )
+    debug(r)
+
+
+async def test_areset_history():
+    r = await suvvy.areset_history(
+        "pytest-2023-12-24T16:42:36.386464-ZSaKvG3D6VcLdV5sdJGl6UrYtJLgdC71G5kU29WYrmBpbg4qDi"
+    )
+    debug(r)
