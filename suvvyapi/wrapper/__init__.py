@@ -72,3 +72,7 @@ class Suvvy(object):
     def check_connection(self) -> bool:
         self._sync_request("GET", "/api/check")
         return True
+
+    async def acheck_connection(self) -> bool:
+        await self._async_request("GET", "/api/check")
+        return True
