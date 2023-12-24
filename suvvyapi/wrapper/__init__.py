@@ -270,6 +270,4 @@ class Suvvy(object):
         return Prediction(**r.json())
 
     def as_history(self, unique_id: str) -> History:
-        return History(
-            unique_id, self
-        )
+        return History(unique_id, self)
