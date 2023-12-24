@@ -9,6 +9,7 @@ from suvvyapi.exceptions.api import (
     HistoryNotFoundError,
     InternalMessageAdded,
 )
+from suvvyapi.history import History
 
 
 def _handle_error(response: httpx.Response) -> None:
@@ -267,3 +268,8 @@ class Suvvy(object):
             return None
 
         return Prediction(**r.json())
+
+    def as_history(self, unique_id: str) -> History:
+        return History(
+            unique_id, self
+        )
