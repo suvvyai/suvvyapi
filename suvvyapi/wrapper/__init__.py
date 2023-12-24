@@ -203,3 +203,67 @@ class Suvvy(object):
             return None
 
         return Prediction(**r.json())
+
+    def predict_history_add_message(
+        self,
+        unique_id: str,
+        message: list[Message] | Message,
+        placeholders: dict | None = None,
+        custom_log_info: dict | None = None,
+        source: str | None = None,
+    ) -> Prediction | None:
+        """Get answer from AI by unique_id.
+        None means API refused to answer"""
+
+        if not isinstance(message, list):
+            message = [message]
+        message = [m.model_dump() for m in message]
+
+        r = self._sync_request(
+            method="POST",
+            path="/api/v1/history/message/predict",
+            params={"unique_id": unique_id},
+            body_json={
+                "placeholders": self._get_placeholders(placeholders),
+                "custom_log_info": self._get_custom_log_info(custom_log_info),
+                "source": source or self.source,
+                "messages": message,
+            },
+        )
+
+        if r.status_code == 202:
+            return None
+
+        return Prediction(**r.json())
+
+    async def apredict_history_add_message(
+        self,
+        unique_id: str,
+        message: list[Message] | Message,
+        placeholders: dict | None = None,
+        custom_log_info: dict | None = None,
+        source: str | None = None,
+    ) -> Prediction | None:
+        """Get answer from AI by unique_id.
+        None means API refused to answer"""
+
+        if not isinstance(message, list):
+            message = [message]
+        message = [m.model_dump() for m in message]
+
+        r = await self._async_request(
+            method="POST",
+            path="/api/v1/history/message/predict",
+            params={"unique_id": unique_id},
+            body_json={
+                "placeholders": self._get_placeholders(placeholders),
+                "custom_log_info": self._get_custom_log_info(custom_log_info),
+                "source": source or self.source,
+                "messages": message,
+            },
+        )
+
+        if r.status_code == 202:
+            return None
+
+        return Prediction(**r.json())

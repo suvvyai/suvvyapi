@@ -26,26 +26,6 @@ async def test_async_check_connection():
     assert await suvvy.acheck_connection()
 
 
-def test_get_history():
-    r = suvvy.get_history(unique_id)
-    debug(r)
-
-
-def test_reset_history():
-    r = suvvy.reset_history(unique_id)
-    debug(r)
-
-
-async def test_aget_history():
-    r = await suvvy.aget_history(async_unique_id)
-    debug(r)
-
-
-async def test_areset_history():
-    r = await suvvy.areset_history(async_unique_id)
-    debug(r)
-
-
 def test_add_message():
     r = suvvy.add_message_to_history(
         unique_id,
@@ -89,4 +69,54 @@ async def test_apredict_history_refuse_to_answer():
         Message(text="Хорошо, подождите минутку"),
     )
     r = await suvvy.apredict_history(async_unique_id)
+    assert r is None
+
+
+def test_get_history():
+    r = suvvy.get_history(unique_id)
+    debug(r)
+
+
+def test_reset_history():
+    r = suvvy.reset_history(unique_id)
+    debug(r)
+
+
+async def test_aget_history():
+    r = await suvvy.aget_history(async_unique_id)
+    debug(r)
+
+
+async def test_areset_history():
+    r = await suvvy.areset_history(async_unique_id)
+    debug(r)
+
+
+def test_predict_history_add_message():
+    r = suvvy.predict_history_add_message(unique_id, Message(text="Привет!"))
+    assert r is not None
+    debug(r)
+
+
+async def test_apredict_history_add_message():
+    r = await suvvy.apredict_history_add_message(
+        async_unique_id, Message(text="Привет!")
+    )
+    assert r is not None
+    debug(r)
+
+
+def test_predict_history_add_message_refuse_to_answer():
+    r = suvvy.predict_history_add_message(
+        unique_id,
+        Message(text="Хорошо, подождите минутку"),
+    )
+    assert r is None
+
+
+async def test_apredict_history_add_message_refuse_to_answer():
+    r = await suvvy.apredict_history_add_message(
+        async_unique_id,
+        Message(text="Хорошо, подождите минутку"),
+    )
     assert r is None
