@@ -1,8 +1,7 @@
 from typing import Literal, Optional
 
-import httpx
-from importlib.metadata import version
 import deprecation
+import httpx
 
 from suvvyapi.exceptions.api import (
     HistoryNotFoundError,
@@ -19,9 +18,11 @@ from suvvyapi.models.responses import Prediction
 
 
 class SuvvyAPIWrapper:
-    @deprecation.deprecated(deprecated_in="1.0", removed_in="2.0",
-                            current_version=version("suvvyapi"),
-                            details="Use the Suvvy() class instead")
+    @deprecation.deprecated(
+        deprecated_in="1.0.0",
+        removed_in="2.0.0",
+        details="Use the Suvvy() class instead",
+    )
     def __init__(
         self,
         token: str,
