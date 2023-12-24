@@ -29,7 +29,7 @@ class HistoryMessage(Message):
     context: str = ""
 
 
-class History(BaseModel):
+class ChatHistory(BaseModel):
     history: list[HistoryMessage]
     unique_id: str
     stopped: bool = False

@@ -1,6 +1,6 @@
 import httpx
 
-from suvvyapi import History, Message, Prediction
+from suvvyapi import ChatHistory, Message, Prediction
 from suvvyapi.exceptions.api import (
     InvalidAPITokenError,
     NegativeBalanceError,
@@ -88,41 +88,41 @@ class Suvvy(object):
         await self._async_request("GET", "/api/check")
         return True
 
-    def get_history(self, unique_id: str) -> History:
+    def get_history(self, unique_id: str) -> ChatHistory:
         """Get history by unique_id"""
         r = self._sync_request(
             "GET", "/api/v1/history", params={"unique_id": unique_id}
         )
-        return History(**r.json())
+        return ChatHistory(**r.json())
 
-    async def aget_history(self, unique_id: str) -> History:
+    async def aget_history(self, unique_id: str) -> ChatHistory:
         """Get history by unique_id"""
         r = await self._async_request(
             "GET", "/api/v1/history", params={"unique_id": unique_id}
         )
-        return History(**r.json())
+        return ChatHistory(**r.json())
 
-    def reset_history(self, unique_id: str) -> History:
+    def reset_history(self, unique_id: str) -> ChatHistory:
         """Reset history by unique_id and return deleted history"""
         r = self._sync_request(
             "PUT", "/api/v1/history", params={"unique_id": unique_id}
         )
         if r.status_code == 202:
             raise HistoryNotFoundError
-        return History(**r.json()["deleted_history"])
+        return ChatHistory(**r.json()["deleted_history"])
 
-    async def areset_history(self, unique_id: str) -> History:
+    async def areset_history(self, unique_id: str) -> ChatHistory:
         """Reset history by unique_id and return deleted history"""
         r = await self._async_request(
             "PUT", "/api/v1/history", params={"unique_id": unique_id}
         )
         if r.status_code == 202:
             raise HistoryNotFoundError
-        return History(**r.json()["deleted_history"])
+        return ChatHistory(**r.json()["deleted_history"])
 
     def add_message_to_history(
         self, unique_id: str, message: list[Message] | Message
-    ) -> History:
+    ) -> ChatHistory:
         """Add message to history by unique_id"""
         if not isinstance(message, list):
             message = [message]
@@ -134,11 +134,11 @@ class Suvvy(object):
             params={"unique_id": unique_id},
             body_json={"messages": message},
         )
-        return History(**r.json())
+        return ChatHistory(**r.json())
 
     async def async_add_message_to_history(
         self, unique_id: str, message: list[Message] | Message
-    ) -> History:
+    ) -> ChatHistory:
         """Add message to history by unique_id"""
         if not isinstance(message, list):
             message = [message]
@@ -150,7 +150,7 @@ class Suvvy(object):
             params={"unique_id": unique_id},
             body_json={"messages": message},
         )
-        return History(**r.json())
+        return ChatHistory(**r.json())
 
     def predict_history(
         self,

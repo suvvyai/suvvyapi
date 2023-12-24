@@ -13,7 +13,7 @@ from suvvyapi.exceptions.api import (
     NegativeBalanceError,
     UnknownAPIError,
 )
-from suvvyapi.models.history import History, Message
+from suvvyapi.models.history import ChatHistory, Message
 from suvvyapi.models.responses import Prediction
 
 
@@ -58,12 +58,12 @@ class SuvvyAPIWrapper:
                 )
             return response
 
-    def get_history(self, unique_id: str) -> History:
+    def get_history(self, unique_id: str) -> ChatHistory:
         response = self._make_request(
             method="GET", path=f"/api/v1/history?unique_id={unique_id}"
         )
         json = response.json()
-        history = History(**json)
+        history = ChatHistory(**json)
         return history
 
     def reset_history(self, unique_id: str) -> None:
