@@ -16,7 +16,11 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Topic :: Software Development :: Libraries :: Python Modules"
 ]
-repository = "https://github.com/barabum0/suvvyapi"
+repository = "https://github.com/suvvyai/suvvyapi"
+
+[project.urls]
+"Issue Tracker" = "https://github.com/suvvyai/suvvyapi/issues"
+"Documentation" = "https://github.com/suvvyai/suvvyapi/wiki"
 
 [tool.poetry.dependencies]
 python = ">=3.10"
