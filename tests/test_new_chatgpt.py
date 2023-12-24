@@ -7,7 +7,7 @@ from devtools import debug
 
 from suvvyapi import Suvvy, Message
 
-suvvy = Suvvy(os.getenv("TEST1_SUVVY_TOKEN"))
+suvvy = Suvvy(os.getenv("TEST1_SUVVY_TOKEN"), api_url="https://test.api.suvvy.ai")
 
 
 def generate_unique_id() -> str:
