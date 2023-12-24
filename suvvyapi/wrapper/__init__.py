@@ -62,7 +62,7 @@ class Suvvy(object):
         body_json: dict | None = None,
         params: dict | None = None,
     ) -> httpx.Response:
-        with httpx.AsyncClient(
+        async with httpx.AsyncClient(
             headers=self._headers, base_url=self._api_url, timeout=300
         ) as client:
             r = await client.request(method, path, json=body_json, params=params)
