@@ -15,6 +15,7 @@ def generate_unique_id() -> str:
 
 
 unique_id = generate_unique_id()
+async_unique_id = generate_unique_id()
 
 
 def test_check_connection():
@@ -36,12 +37,12 @@ def test_reset_history():
 
 
 async def test_aget_history():
-    r = await suvvy.aget_history(unique_id)
+    r = await suvvy.aget_history(async_unique_id)
     debug(r)
 
 
 async def test_areset_history():
-    r = await suvvy.areset_history(unique_id)
+    r = await suvvy.areset_history(async_unique_id)
     debug(r)
 
 
@@ -55,7 +56,7 @@ def test_add_message():
 
 async def test_async_add_message():
     r = await suvvy.async_add_message_to_history(
-        unique_id,
+        async_unique_id,
         Message(text="Привет!"),
     )
     debug(r)
