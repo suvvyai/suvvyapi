@@ -37,5 +37,5 @@ class History(BaseModel):
     last_interaction_time: datetime
     created_time: datetime
     channel_name: str
-    last_source: str
-    last_instance_id: int
+    last_source: str | None = None
+    last_instance_id: int | None = None
