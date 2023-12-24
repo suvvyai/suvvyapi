@@ -212,7 +212,7 @@ class Suvvy(object):
         custom_log_info: dict | None = None,
         source: str | None = None,
     ) -> Prediction | None:
-        """Get answer from AI by unique_id.
+        """Add message and get answer from AI by unique_id.
         None means API refused to answer"""
 
         if not isinstance(message, list):
@@ -244,7 +244,7 @@ class Suvvy(object):
         custom_log_info: dict | None = None,
         source: str | None = None,
     ) -> Prediction | None:
-        """Get answer from AI by unique_id.
+        """Add message and get answer from AI by unique_id.
         None means API refused to answer"""
 
         if not isinstance(message, list):
