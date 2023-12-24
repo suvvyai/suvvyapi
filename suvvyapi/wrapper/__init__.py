@@ -1,6 +1,6 @@
 import httpx
 
-from suvvyapi import History
+from suvvyapi import History, Message
 from suvvyapi.exceptions.api import (
     InvalidAPITokenError,
     NegativeBalanceError,
@@ -111,3 +111,33 @@ class Suvvy(object):
         if r.status_code == 202:
             raise HistoryNotFoundError
         return History(**r.json()["deleted_history"])
+
+    def add_message_to_history(
+        self, unique_id: str, message: list[Message] | Message
+    ) -> History:
+        """Add message to history by unique_id"""
+        if not isinstance(message, list):
+            message = [message]
+
+        r = self._sync_request(
+            "POST",
+            "/api/v1/history/message",
+            params={"unique_id": unique_id},
+            body_json={"messages": message},
+        )
+        return History(**r.json())
+
+    async def async_add_message_to_history(
+        self, unique_id: str, message: list[Message] | Message
+    ) -> History:
+        """Add message to history by unique_id"""
+        if not isinstance(message, list):
+            message = [message]
+
+        r = await self._async_request(
+            "POST",
+            "/api/v1/history/message",
+            params={"unique_id": unique_id},
+            body_json={"messages": message},
+        )
+        return History(**r.json())
