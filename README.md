@@ -8,11 +8,11 @@
 
 </div>
 
-## About SuvvyAPI
+## About SuvvyAPI 📘
 
-SuvvyAPI is an asynchronous Python API wrapper built on top of `httpx` and `pydantic` for the Suvvy AI API, offering an easy way to interact with the Suvvy AI services in a Pythonic way.
+SuvvyAPI is an asynchronous Python API wrapper built on top of `httpx` and `pydantic` for the Suvvy AI API, offering an easy and Pythonic way to interact with the Suvvy AI services.
 
-## Installation
+## Installation 🛠️
 
 To install SuvvyAPI, simply use pip:
 
@@ -20,52 +20,31 @@ To install SuvvyAPI, simply use pip:
 pip install -U suvvyapi
 ```
 
-## Usage
+## Usage 🚀
 
 ### Synchronous Usage
 
 You can use SuvvyAPI synchronously as follows:
 
 ```python
-from suvvyapi import SuvvyAPIWrapper, Message
+from suvvyapi import Suvvy, Message
 
-suvvy = SuvvyAPIWrapper("YOUR_TOKEN")
-response = suvvy.predict(Message(text="Say hello to Python!"), "random_id")
+suvvy = Suvvy("YOUR_TOKEN")
+history = suvvy.as_history("random_id")
+response = history.predict_add_message(Message(text="Say hello to Python!"))
 ```
 *Note: Replace "YOUR_TOKEN" with your actual token from [Suvvy AI](https://home.suvvy.ai/).*
 
+### [More in documentation](https://github.com/suvvyai/suvvyapi/wiki)
 
-### Asynchronous Usage
+## Troubleshooting 💡
 
-For asynchronous usage:
+For issues and troubleshooting, please refer to the [issues section](https://github.com/suvvyai/suvvyapi/issues) on the GitHub repository.
 
-```python
-import asyncio
-from suvvyapi import AsyncSuvvyAPIWrapper, Message
-
-suvvy = AsyncSuvvyAPIWrapper("YOUR_TOKEN")
-
-async def main():
-    response = await suvvy.predict(Message(text="Say hello to Python!"), "random_id")
-
-asyncio.run(main())
-```
-
-## Building from Sources
-
-If you prefer to build from source:
-
-```bash
-git clone https://github.com/barabum0/suvvyapi
-cd suvvyapi
-pip install -r requirements.txt
-python -m build
-```
-
-## Contribution
+## Contribution 👥
 
 Contributions are welcome. Please fork the repository, make your changes, and submit a pull request.
 
-## License
+## License 📄
 
 SuvvyAPI is released under the [MIT License](https://github.com/suvvyai/suvvyapi/blob/main/LICENSE).
