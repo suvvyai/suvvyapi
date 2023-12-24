@@ -99,6 +99,8 @@ class Suvvy(object):
         r = self._sync_request(
             "PUT", "/api/v1/history", params={"unique_id": unique_id}
         )
+        if r.status_code == 202:
+            raise HistoryNotFoundError
         return History(**r.json()["deleted_history"])
 
     async def areset_history(self, unique_id: str) -> History:
@@ -106,4 +108,6 @@ class Suvvy(object):
         r = await self._async_request(
             "PUT", "/api/v1/history", params={"unique_id": unique_id}
         )
+        if r.status_code == 202:
+            raise HistoryNotFoundError
         return History(**r.json()["deleted_history"])
