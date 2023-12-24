@@ -27,7 +27,7 @@ def test_get():
 
 
 async def test_aget():
-    r = await history.aget()
+    r = await async_history.aget()
     debug(r)
 
 
@@ -37,7 +37,7 @@ def test_add_message():
 
 
 async def test_async_add_message():
-    r = await history.async_add_message(Message(text="Привет!"))
+    r = await async_history.async_add_message(Message(text="Привет!"))
     debug(r)
 
 
@@ -47,7 +47,7 @@ def test_predict():
 
 
 async def test_apredict():
-    r = await history.apredict()
+    r = await async_history.apredict()
     debug(r)
 
 
@@ -57,7 +57,7 @@ def test_reset():
 
 
 async def test_areset():
-    r = await history.areset()
+    r = await async_history.areset()
     debug(r)
 
 
@@ -67,5 +67,5 @@ def test_predict_add_message():
 
 
 async def test_apredict_add_message():
-    r = await history.apredict_add_message(Message(text="Привет!"))
+    r = await async_history.apredict_add_message(Message(text="Привет!"))
     debug(r)
