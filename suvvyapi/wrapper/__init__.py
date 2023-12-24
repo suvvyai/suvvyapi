@@ -1,6 +1,6 @@
 import httpx
 
-from suvvyapi import History, Message
+from suvvyapi import History, Message, Prediction
 from suvvyapi.exceptions.api import (
     InvalidAPITokenError,
     NegativeBalanceError,
@@ -41,6 +41,14 @@ class Suvvy(object):
 
         self._headers = {"Authorization": f"Bearer {api_token}"}
         self._api_url = api_url.rstrip("/ \\\n")
+
+    def _get_placeholders(self, placeholders: dict | None = None) -> dict:
+        placeholders = placeholders or {}
+        return {**self.placeholders, **placeholders}
+
+    def _get_custom_log_info(self, custom_log_info: dict | None = None) -> dict:
+        custom_log_info = custom_log_info or {}
+        return {**self.custom_log_info, **custom_log_info}
 
     def _sync_request(
         self,
@@ -143,3 +151,55 @@ class Suvvy(object):
             body_json={"messages": message},
         )
         return History(**r.json())
+
+    def predict_history(
+        self,
+        unique_id: str,
+        placeholders: dict | None = None,
+        custom_log_info: dict | None = None,
+        source: str | None = None,
+    ) -> Prediction | None:
+        """Get answer from AI by unique_id.
+        None means API refused to answer"""
+
+        r = self._sync_request(
+            method="POST",
+            path="/api/v1/history/predict",
+            params={"unique_id": unique_id},
+            body_json={
+                "placeholders": self._get_placeholders(placeholders),
+                "custom_log_info": self._get_custom_log_info(custom_log_info),
+                "source": source or self.source,
+            },
+        )
+
+        if r.status_code == 202:
+            return None
+
+        return Prediction(**r.json())
+
+    async def apredict_history(
+        self,
+        unique_id: str,
+        placeholders: dict | None = None,
+        custom_log_info: dict | None = None,
+        source: str | None = None,
+    ) -> Prediction | None:
+        """Get answer from AI by unique_id.
+        None means API refused to answer"""
+
+        r = await self._async_request(
+            method="POST",
+            path="/api/v1/history/predict",
+            params={"unique_id": unique_id},
+            body_json={
+                "placeholders": self._get_placeholders(placeholders),
+                "custom_log_info": self._get_custom_log_info(custom_log_info),
+                "source": source or self.source,
+            },
+        )
+
+        if r.status_code == 202:
+            return None
+
+        return Prediction(**r.json())

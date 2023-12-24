@@ -60,3 +60,33 @@ async def test_async_add_message():
         Message(text="Привет!"),
     )
     debug(r)
+
+
+def test_predict_history():
+    r = suvvy.predict_history(unique_id)
+    assert r is not None
+    debug(r)
+
+
+async def test_apredict_history():
+    r = await suvvy.apredict_history(async_unique_id)
+    assert r is not None
+    debug(r)
+
+
+def test_predict_history_refuse_to_answer():
+    suvvy.add_message_to_history(
+        unique_id,
+        Message(text="Хорошо, подождите минутку"),
+    )
+    r = suvvy.predict_history(unique_id)
+    assert r is None
+
+
+async def test_apredict_history_refuse_to_answer():
+    await suvvy.async_add_message_to_history(
+        async_unique_id,
+        Message(text="Хорошо, подождите минутку"),
+    )
+    r = await suvvy.apredict_history(async_unique_id)
+    assert r is None
