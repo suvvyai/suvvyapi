@@ -118,6 +118,7 @@ class Suvvy(object):
         """Add message to history by unique_id"""
         if not isinstance(message, list):
             message = [message]
+        message = [m.model_dump() for m in message]
 
         r = self._sync_request(
             "POST",
@@ -133,6 +134,7 @@ class Suvvy(object):
         """Add message to history by unique_id"""
         if not isinstance(message, list):
             message = [message]
+        message = [m.model_dump() for m in message]
 
         r = await self._async_request(
             "POST",
