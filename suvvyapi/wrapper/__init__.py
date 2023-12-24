@@ -1,5 +1,6 @@
 import httpx
 
+from suvvyapi import History
 from suvvyapi.exceptions.api import (
     InvalidAPITokenError,
     NegativeBalanceError,
@@ -70,9 +71,39 @@ class Suvvy(object):
             return r
 
     def check_connection(self) -> bool:
+        """Check connection and API token"""
         self._sync_request("GET", "/api/check")
         return True
 
     async def acheck_connection(self) -> bool:
+        """Check connection and API token"""
         await self._async_request("GET", "/api/check")
         return True
+
+    def get_history(self, unique_id: str) -> History:
+        """Get history by unique_id"""
+        r = self._sync_request(
+            "GET", "/api/v1/history", params={"unique_id": unique_id}
+        )
+        return History(**r.json())
+
+    async def aget_history(self, unique_id: str) -> History:
+        """Get history by unique_id"""
+        r = await self._async_request(
+            "GET", "/api/v1/history", params={"unique_id": unique_id}
+        )
+        return History(**r.json())
+
+    def reset_history(self, unique_id: str) -> History:
+        """Reset history by unique_id and return deleted history"""
+        r = self._sync_request(
+            "PUT", "/api/v1/history", params={"unique_id": unique_id}
+        )
+        return History(**r.json()["deleted_history"])
+
+    async def areset_history(self, unique_id: str) -> History:
+        """Reset history by unique_id and return deleted history"""
+        r = await self._async_request(
+            "PUT", "/api/v1/history", params={"unique_id": unique_id}
+        )
+        return History(**r.json()["deleted_history"])

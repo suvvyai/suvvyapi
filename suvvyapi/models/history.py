@@ -34,3 +34,8 @@ class History(BaseModel):
     unique_id: str
     stopped: bool = False
     stop_reason: str = "unknown"
+    last_interaction_time: datetime
+    created_time: datetime
+    channel_name: str
+    last_source: str
+    last_instance_id: int
