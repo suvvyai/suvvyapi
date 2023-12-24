@@ -20,7 +20,7 @@ def _handle_error(response: httpx.Response) -> None:
         406: InternalMessageAdded,
         413: HistoryTooLongError,
         404: HistoryNotFoundError,
-        500: InternalAPIError
+        500: InternalAPIError,
     }
     raise exceptions[response.status_code](response.json().get("detail", None))
 
@@ -51,7 +51,9 @@ class Suvvy(object):
         with httpx.Client(
             headers=self._headers, base_url=self._api_url, timeout=300
         ) as client:
-            return client.request(method, path, json=body_json, params=params)
+            r = client.request(method, path, json=body_json, params=params)
+            _handle_error(r)
+            return r
 
     async def _async_request(
         self,
@@ -63,4 +65,13 @@ class Suvvy(object):
         with httpx.AsyncClient(
             headers=self._headers, base_url=self._api_url, timeout=300
         ) as client:
-            return await client.request(method, path, json=body_json, params=params)
+            r = await client.request(method, path, json=body_json, params=params)
+            _handle_error(r)
+            return r
+
+    def check_connection(self) -> bool:
+        self._sync_request(
+            "GET",
+            "/api/check"
+        )
+        return True
