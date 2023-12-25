@@ -34,6 +34,17 @@ black = "^23.12.0"
 isort = "^5.13.2"
 pytest = "^7.4.3"
 pytest-asyncio = "^0.23.2"
+mypy = "^1.8.0"
+
+[tool.isort]
+profile = "black"
+src_paths = ["."]
+
+[tool.mypy]
+python_version = "3.11"
+disallow_untyped_defs = true
+ignore_missing_imports = true
+disable_error_code = "attr-defined"
 
 [build-system]
 requires = ["poetry-core"]
