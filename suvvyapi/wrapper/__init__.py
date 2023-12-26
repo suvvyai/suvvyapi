@@ -272,6 +272,7 @@ class Suvvy(object):
         return Prediction(**r.json())
 
     def as_history(self, unique_id: str) -> "History":  # type: ignore
+        """Represent history as a History object"""
         from suvvyapi.history import History
 
         return History(unique_id, self)  # type: ignore
