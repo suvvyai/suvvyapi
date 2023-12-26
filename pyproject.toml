@@ -45,6 +45,7 @@ python_version = "3.11"
 disallow_untyped_defs = true
 ignore_missing_imports = true
 disable_error_code = "attr-defined"
+exclude = '^tests/'  # put --exclude="^tests/" as argument in PyCharm mypy plugin
 
 [build-system]
 requires = ["poetry-core"]

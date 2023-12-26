@@ -1,3 +1,4 @@
+# mypy: ignore_errors
 import datetime
 import os
 import random
