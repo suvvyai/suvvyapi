@@ -28,13 +28,13 @@ class SuvvyAPIWrapper:
         token: str,
         base_url: str = "https://api.suvvy.ai/",
         check_connection: bool = True,
-        placeholders: dict = {},
-        custom_log_info: dict = {},
+        placeholders: dict | None = None,
+        custom_log_info: dict | None = None,
     ):
         self.token = token
         self.base_url = base_url.lstrip("/")
-        self.placeholders = placeholders
-        self.custom_log_info = custom_log_info
+        self.placeholders = placeholders or {}
+        self.custom_log_info = custom_log_info or {}
 
         if check_connection:
             self._make_request("GET", "/api/check")
@@ -43,7 +43,7 @@ class SuvvyAPIWrapper:
         self,
         method: Literal["GET", "POST", "PUT", "DELETE"],
         path: str,
-        body: Optional[dict] = {},
+        body: dict | None = None,
     ) -> httpx.Response:
         headers = {"Authorization": f"bearer {self.token}"}
         with httpx.Client(headers=headers, base_url=self.base_url, timeout=300) as c:

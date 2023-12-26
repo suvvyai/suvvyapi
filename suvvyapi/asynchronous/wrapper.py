@@ -27,8 +27,8 @@ class AsyncSuvvyAPIWrapper:
         self,
         token: str,
         base_url: str = "https://api.suvvy.ai/",
-        placeholders: dict = {},
-        custom_log_info: dict = {},
+        placeholders: dict | None = None,
+        custom_log_info: dict | None = None,
     ) -> None:
         self.token = token
         self.base_url = base_url.lstrip("/")
@@ -39,7 +39,7 @@ class AsyncSuvvyAPIWrapper:
         self,
         method: Literal["GET", "POST", "PUT", "DELETE"],
         path: str,
-        body: Optional[dict] = {},
+        body: dict | None = None,
     ) -> httpx.Response:
         headers = {"Authorization": f"bearer {self.token}"}
         async with httpx.AsyncClient(
