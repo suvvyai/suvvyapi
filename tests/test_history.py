@@ -12,7 +12,12 @@ suvvy = Suvvy(os.getenv("TEST1_SUVVY_TOKEN"), api_url="https://test.api.suvvy.ai
 
 
 def generate_unique_id() -> str:
-    return f"pytest-{datetime.datetime.utcnow().isoformat()}-{''.join(random.choices(string.digits + string.ascii_letters, k=50))}"
+    """Generate a unique dialog ID"""
+    return (
+        f"pytest-"
+        f"{datetime.datetime.utcnow().isoformat()}-"
+        f"{''.join(random.choices(string.digits + string.ascii_letters, k=50))}"
+    )
 
 
 unique_id = generate_unique_id()

@@ -15,7 +15,7 @@ class NegativeBalanceError(BaseException):
     def from_detail(cls, detail: str) -> "NegativeBalanceError":
         exc = cls("Your balance is under zero")
 
-        balance_match = re.search(pattern="(\(\d*\))", string=detail)
+        balance_match = re.search(pattern=r"(\(\d*\))", string=detail)
         if balance_match is None:
             return exc
 

@@ -1,4 +1,4 @@
-from typing import Literal, Optional
+from typing import Literal
 
 import deprecation
 import httpx
@@ -32,8 +32,8 @@ class AsyncSuvvyAPIWrapper:
     ) -> None:
         self.token = token
         self.base_url = base_url.lstrip("/")
-        self.placeholders = placeholders
-        self.custom_log_info = custom_log_info
+        self.placeholders = placeholders or {}
+        self.custom_log_info = custom_log_info or {}
 
     async def _make_request(
         self,
@@ -65,7 +65,7 @@ class AsyncSuvvyAPIWrapper:
         return history
 
     async def reset_history(self, unique_id: str) -> None:
-        response = await self._make_request(
+        await self._make_request(
             method="PUT", path=f"/api/v1/history?unique_id={unique_id}"
         )
 
@@ -85,7 +85,7 @@ class AsyncSuvvyAPIWrapper:
         message = _ms
 
         body = {"messages": message, "pass_ai_as_employee": pass_ai_as_employee}
-        response = await self._make_request(
+        await self._make_request(
             method="POST",
             path=f"/api/v1/history/message?unique_id={unique_id}",
             body=body,

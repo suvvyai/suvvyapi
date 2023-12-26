@@ -1,4 +1,4 @@
-from typing import Literal, Optional
+from typing import Literal
 
 import deprecation
 import httpx
@@ -67,9 +67,7 @@ class SuvvyAPIWrapper:
         return history
 
     def reset_history(self, unique_id: str) -> None:
-        response = self._make_request(
-            method="PUT", path=f"/api/v1/history?unique_id={unique_id}"
-        )
+        self._make_request(method="PUT", path=f"/api/v1/history?unique_id={unique_id}")
 
     def add_message(
         self,
@@ -87,7 +85,7 @@ class SuvvyAPIWrapper:
         message = _ms
 
         body = {"messages": message, "pass_ai_as_employee": pass_ai_as_employee}
-        response = self._make_request(
+        self._make_request(
             method="POST",
             path=f"/api/v1/history/message?unique_id={unique_id}",
             body=body,
