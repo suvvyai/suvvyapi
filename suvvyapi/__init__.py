@@ -15,15 +15,15 @@ from suvvyapi.sync.wrapper import SuvvyAPIWrapper
 from suvvyapi.wrapper import Suvvy
 
 __all__ = [
-    AsyncSuvvyAPIWrapper,
-    SuvvyAPIWrapper,
-    Suvvy,
-    Prediction,
-    LLMResult,
-    TokenUsage,
-    BalanceUsage,
-    ChatHistory,
-    Message,
-    HistoryMessage,
-    FunctionDetails,
+    "AsyncSuvvyAPIWrapper",
+    "SuvvyAPIWrapper",
+    "Suvvy",
+    "Prediction",
+    "LLMResult",
+    "TokenUsage",
+    "BalanceUsage",
+    "ChatHistory",
+    "Message",
+    "HistoryMessage",
+    "FunctionDetails",
 ]
