@@ -1,3 +1,5 @@
+from typing import Type
+
 import httpx
 
 from suvvyapi import ChatHistory, Message, Prediction
@@ -23,7 +25,8 @@ def _handle_error(response: httpx.Response) -> None:
         404: HistoryNotFoundError,
         500: InternalAPIError,
     }
-    raise exceptions[response.status_code](response.json().get("detail", None))
+    exception: Type[BaseException] = exceptions[response.status_code]  # type: ignore
+    raise exception(response.json().get("detail", None))
 
 
 class Suvvy(object):
@@ -268,7 +271,7 @@ class Suvvy(object):
 
         return Prediction(**r.json())
 
-    def as_history(self, unique_id: str) -> "History":
+    def as_history(self, unique_id: str) -> "History":  # type: ignore
         from suvvyapi.history import History
 
-        return History(unique_id, self)
+        return History(unique_id, self)  # type: ignore

@@ -12,11 +12,14 @@ class NegativeBalanceError(BaseException):
     balance: Optional[int] = None
 
     @classmethod
-    def from_detail(cls, detail: str):
+    def from_detail(cls, detail: str) -> "NegativeBalanceError":
         exc = cls("Your balance is under zero")
-        balance = int(
-            re.search(pattern="(\(\d*\))", string=detail).group(0).strip("()")
-        )
+
+        balance_match = re.search(pattern="(\(\d*\))", string=detail)
+        if balance_match is None:
+            return exc
+
+        balance = int(balance_match.group(0).strip("()"))
         exc.balance = balance
         return exc
 

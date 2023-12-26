@@ -76,7 +76,7 @@ class SuvvyAPIWrapper:
         message: Message | list[Message],
         unique_id: str,
         pass_ai_as_employee: bool = True,
-    ):
+    ) -> None:
         if not isinstance(message, list):
             message = [message]
 
@@ -96,11 +96,14 @@ class SuvvyAPIWrapper:
     def predict_from_history(
         self,
         unique_id: str,
-        placeholders: Optional[dict] = {},
+        placeholders: dict | None = None,
         auto_insert_ai: bool = True,
-        custom_log_info: Optional[dict] = {},
+        custom_log_info: dict | None = None,
         raise_if_dialog_stopped: bool = False,
     ) -> Prediction:
+        placeholders = placeholders or {}
+        custom_log_info = custom_log_info or {}
+
         custom_log_info = dict(**self.custom_log_info, **custom_log_info)
         placeholders = dict(**self.placeholders, **placeholders)
 
@@ -148,11 +151,14 @@ class SuvvyAPIWrapper:
         message: Message | list[Message],
         unique_id: str,
         pass_ai_as_employee: bool = True,
-        placeholders: Optional[dict] = {},
+        placeholders: dict | None = None,
         auto_insert_ai: bool = True,
-        custom_log_info: Optional[dict] = {},
+        custom_log_info: dict | None = None,
         raise_if_dialog_stopped: bool = False,
-    ):
+    ) -> Prediction:
+        placeholders = placeholders or {}
+        custom_log_info = custom_log_info or {}
+
         if not isinstance(message, list):
             message = [message]
 

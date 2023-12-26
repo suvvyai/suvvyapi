@@ -27,17 +27,13 @@ class AsyncSuvvyAPIWrapper:
         self,
         token: str,
         base_url: str = "https://api.suvvy.ai/",
-        check_connection: bool = True,
         placeholders: dict = {},
         custom_log_info: dict = {},
-    ):
+    ) -> None:
         self.token = token
         self.base_url = base_url.lstrip("/")
         self.placeholders = placeholders
         self.custom_log_info = custom_log_info
-
-        if check_connection:
-            self._make_request("GET", "/api/check")
 
     async def _make_request(
         self,
@@ -78,7 +74,7 @@ class AsyncSuvvyAPIWrapper:
         message: Message | list[Message],
         unique_id: str,
         pass_ai_as_employee: bool = True,
-    ):
+    ) -> None:
         if not isinstance(message, list):
             message = [message]
 
@@ -98,11 +94,14 @@ class AsyncSuvvyAPIWrapper:
     async def predict_from_history(
         self,
         unique_id: str,
-        placeholders: Optional[dict] = {},
+        placeholders: dict | None = None,
         auto_insert_ai: bool = True,
-        custom_log_info: Optional[dict] = {},
+        custom_log_info: dict | None = None,
         raise_if_dialog_stopped: bool = False,
     ) -> Prediction:
+        placeholders = placeholders or {}
+        custom_log_info = custom_log_info or {}
+
         custom_log_info = dict(**self.custom_log_info, **custom_log_info)
         placeholders = dict(**self.placeholders, **placeholders)
 
@@ -150,11 +149,14 @@ class AsyncSuvvyAPIWrapper:
         message: Message | list[Message],
         unique_id: str,
         pass_ai_as_employee: bool = True,
-        placeholders: Optional[dict] = {},
+        placeholders: dict | None = None,
         auto_insert_ai: bool = True,
-        custom_log_info: Optional[dict] = {},
+        custom_log_info: dict | None = None,
         raise_if_dialog_stopped: bool = False,
-    ):
+    ) -> Prediction:
+        placeholders = placeholders or {}
+        custom_log_info = custom_log_info or {}
+
         custom_log_info = dict(**self.custom_log_info, **custom_log_info)
         placeholders = dict(**self.placeholders, **placeholders)
 
