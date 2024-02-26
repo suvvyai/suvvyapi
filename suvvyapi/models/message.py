@@ -23,7 +23,6 @@ class Message(BaseModel):
         return self.message_data.data_type in acceptable_data_types
 
 
-
 class RequestMessage(Message):
     message_sender: Literal[SenderRole.CUSTOMER, SenderRole.EMPLOYEE]
 
