@@ -12,8 +12,10 @@ from suvvyapi.exceptions.api import (
     InternalMessageAdded,
 )
 from suvvyapi.models.dialogue import Dialogue
+from suvvyapi.models.enums import SenderRole
 from suvvyapi.models.history import ChatHistory
 from suvvyapi.models.message import DialogueMessage
+from suvvyapi.models.message_data.text import TextMessageData
 
 
 def _handle_error(response: httpx.Response) -> None:
@@ -217,14 +219,15 @@ class Suvvy(object):
     def predict_history_add_message(
         self,
         unique_id: str,
-        message: list[Message] | Message,
+        message: list[Message] | Message | str,
         placeholders: dict | None = None,
         custom_log_info: dict | None = None,
         source: str | None = None,
     ) -> tuple[list[DialogueMessage], Usage]:
         """Add message and get answer from AI by unique_id. Returns new messages and token usage."""
-
-        if not isinstance(message, list):
+        if isinstance(message, str):
+            message = [Message(message_sender=SenderRole.CUSTOMER, message_data=TextMessageData(content=message))]
+        elif not isinstance(message, list):
             message = [message]
         message = [m.model_dump() for m in message]
 
@@ -251,14 +254,15 @@ class Suvvy(object):
     async def apredict_history_add_message(
         self,
         unique_id: str,
-        message: list[Message] | Message,
+        message: list[Message] | Message | str,
         placeholders: dict | None = None,
         custom_log_info: dict | None = None,
         source: str | None = None,
     ) -> tuple[list[DialogueMessage], Usage]:
         """Add message and get answer from AI by unique_id. Returns new messages and token usage."""
-
-        if not isinstance(message, list):
+        if isinstance(message, str):
+            message = [Message(message_sender=SenderRole.CUSTOMER, message_data=TextMessageData(content=message))]
+        elif not isinstance(message, list):
             message = [message]
         message = [m.model_dump() for m in message]
 

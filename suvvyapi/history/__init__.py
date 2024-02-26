@@ -32,7 +32,7 @@ class History(object):
 
     def predict_add_message(
         self,
-        message: list[Message] | Message,
+        message: list[Message] | Message | str,
         placeholders: dict | None = None,
         custom_log_info: dict | None = None,
         source: str | None = None,
@@ -44,7 +44,7 @@ class History(object):
 
     async def apredict_add_message(
         self,
-        message: list[Message] | Message,
+        message: list[Message] | Message | str,
         placeholders: dict | None = None,
         custom_log_info: dict | None = None,
         source: str | None = None,
