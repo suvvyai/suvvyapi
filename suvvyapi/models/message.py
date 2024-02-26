@@ -3,7 +3,7 @@ from typing import Literal, Union
 
 from pydantic import BaseModel, UUID4, Field
 
-from suvvyapi.models.enums import SenderRole
+from suvvyapi.models.enums import SenderRole, ContentType
 from suvvyapi.models.message_data.text import TextMessageData
 from suvvyapi.models.message_data.tool import (
     ToolResponseMessageData,
@@ -17,6 +17,11 @@ MessageDataUnion = Union[TextMessageData, ToolCallsMessageData, ToolResponseMess
 class Message(BaseModel):
     message_sender: SenderRole
     message_data: MessageDataUnion
+
+    def is_visible(self, acceptable_data_types: set[ContentType] | None = None) -> bool:
+        acceptable_data_types = acceptable_data_types or {ContentType.TEXT}
+        return self.message_data.data_type in acceptable_data_types
+
 
 
 class RequestMessage(Message):
