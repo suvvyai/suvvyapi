@@ -1,15 +1,22 @@
 from datetime import datetime
-from typing import Literal
+from typing import Literal, Union
 
 from pydantic import BaseModel, UUID4, Field
 
 from suvvyapi.models.enums import SenderRole
 from suvvyapi.models.message_data.text import TextMessageData
+from suvvyapi.models.message_data.tool import (
+    ToolResponseMessageData,
+    ToolCallsMessageData,
+)
+
+
+MessageDataUnion = Union[TextMessageData, ToolCallsMessageData, ToolResponseMessageData]
 
 
 class Message(BaseModel):
     message_sender: SenderRole
-    message_data: TextMessageData
+    message_data: MessageDataUnion
 
 
 class RequestMessage(Message):
@@ -22,4 +29,4 @@ class DialogueMessage(Message):
     created_at: datetime = Field(frozen=True)
 
     message_sender: SenderRole = Field(frozen=True)
-    message_data: TextMessageData = Field(frozen=True)
+    message_data: MessageDataUnion = Field(frozen=True)
