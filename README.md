@@ -34,7 +34,7 @@ from suvvyapi import Suvvy, Message
 
 suvvy = Suvvy("YOUR_TOKEN")
 history = suvvy.as_history("random_id")
-response = history.predict_add_message(Message(text="Say hello to Python!"))
+response = history.predict_add_message("Hi!")
 ```
 *Note: Replace "YOUR_TOKEN" with your actual token from [Suvvy AI](https://home.suvvy.ai/).*
 
