@@ -2,7 +2,7 @@ from typing import Type
 
 import httpx
 
-from suvvyapi import ChatHistory, Message, Prediction
+from suvvyapi import Message, Usage
 from suvvyapi.exceptions.api import (
     InvalidAPITokenError,
     NegativeBalanceError,
@@ -11,6 +11,9 @@ from suvvyapi.exceptions.api import (
     HistoryNotFoundError,
     InternalMessageAdded,
 )
+from suvvyapi.models.dialogue import Dialogue
+from suvvyapi.models.history import ChatHistory
+from suvvyapi.models.message import DialogueMessage
 
 
 def _handle_error(response: httpx.Response) -> None:
@@ -91,121 +94,125 @@ class Suvvy(object):
         await self._async_request("GET", "/api/check")
         return True
 
-    def get_history(self, unique_id: str) -> ChatHistory:
+    def get_dialogue(self, unique_id: str) -> Dialogue:
+        """Get dialogue by unique_id"""
+        r = self._sync_request("GET", f"/api/v1/dialogue/{unique_id}/get")
+        return Dialogue.model_validate(r.json())
+
+    async def aget_history(self, unique_id: str) -> Dialogue:
         """Get history by unique_id"""
-        r = self._sync_request(
-            "GET", "/api/v1/history", params={"unique_id": unique_id}
-        )
-        return ChatHistory(**r.json())
+        r = await self._async_request("GET", f"/api/v1/dialogue/{unique_id}/get")
+        return Dialogue.model_validate(**r.json())
 
-    async def aget_history(self, unique_id: str) -> ChatHistory:
-        """Get history by unique_id"""
-        r = await self._async_request(
-            "GET", "/api/v1/history", params={"unique_id": unique_id}
-        )
-        return ChatHistory(**r.json())
-
-    def reset_history(self, unique_id: str) -> ChatHistory:
+    def reset_history(self, unique_id: str) -> Dialogue:
         """Reset history by unique_id and return deleted history"""
-        r = self._sync_request(
-            "PUT", "/api/v1/history", params={"unique_id": unique_id}
-        )
-        if r.status_code == 202:
+        r = self._sync_request("PUT", f"/api/v1/dialogue/{unique_id}/delete")
+        if r.status_code == 404:
             raise HistoryNotFoundError
-        return ChatHistory(**r.json()["deleted_history"])
+        return Dialogue.model_validate(**r.json())
 
-    async def areset_history(self, unique_id: str) -> ChatHistory:
+    async def areset_history(self, unique_id: str) -> Dialogue:
         """Reset history by unique_id and return deleted history"""
-        r = await self._async_request(
-            "PUT", "/api/v1/history", params={"unique_id": unique_id}
-        )
-        if r.status_code == 202:
+        r = await self._async_request("PUT", f"/api/v1/dialogue/{unique_id}/delete")
+        if r.status_code == 404:
             raise HistoryNotFoundError
-        return ChatHistory(**r.json()["deleted_history"])
+        return Dialogue.model_validate(**r.json())
 
     def add_message_to_history(
         self, unique_id: str, message: list[Message] | Message
-    ) -> ChatHistory:
-        """Add message to history by unique_id"""
+    ) -> tuple[list[DialogueMessage], int]:
+        """Add message to history by unique_id. Returns new messages and used tokens"""
         if not isinstance(message, list):
             message = [message]
-        message = [m.model_dump() for m in message]
+        message = [m.model_dump(mode="json") for m in message]
 
         r = self._sync_request(
             "POST",
-            "/api/v1/history/message",
-            params={"unique_id": unique_id},
+            f"/api/v1/dialogue/{unique_id}/messages/add",
             body_json={"messages": message},
         )
-        return ChatHistory(**r.json())
+        used_tokens = r.json().get("used_tokens", 0)
+        added_messages = [
+            DialogueMessage.model_validate(m)
+            for m in r.json().get("added_messages", [])
+        ]
+        return added_messages, used_tokens
 
     async def async_add_message_to_history(
         self, unique_id: str, message: list[Message] | Message
-    ) -> ChatHistory:
-        """Add message to history by unique_id"""
+    ) -> tuple[list[DialogueMessage], int]:
+        """Add message to history by unique_id. Returns new messages and used tokens"""
         if not isinstance(message, list):
             message = [message]
-        message = [m.model_dump() for m in message]
+        message = [m.model_dump(mode="json") for m in message]
 
         r = await self._async_request(
             "POST",
-            "/api/v1/history/message",
-            params={"unique_id": unique_id},
+            f"/api/v1/dialogue/{unique_id}/messages/add",
             body_json={"messages": message},
         )
-        return ChatHistory(**r.json())
+        used_tokens = r.json().get("used_tokens", 0)
+        added_messages = [
+            DialogueMessage.model_validate(m)
+            for m in r.json().get("added_messages", [])
+        ]
+        return added_messages, used_tokens
 
     def predict_history(
         self,
         unique_id: str,
         placeholders: dict | None = None,
-        custom_log_info: dict | None = None,
+        additional_log_info: dict | None = None,
         source: str | None = None,
-    ) -> Prediction | None:
-        """Get answer from AI by unique_id.
-        None means API refused to answer"""
+    ) -> tuple[list[DialogueMessage], Usage]:
+        """Get answer from AI by unique_id. Returns new messages and token usage."""
 
         r = self._sync_request(
             method="POST",
-            path="/api/v1/history/predict",
-            params={"unique_id": unique_id},
+            path=f"/api/v1/dialogue/{unique_id}/predict",
             body_json={
                 "placeholders": self._get_placeholders(placeholders),
-                "custom_log_info": self._get_custom_log_info(custom_log_info),
+                "custom_log_info": self._get_custom_log_info(additional_log_info),
                 "source": source or self.source,
             },
         )
 
         if r.status_code == 202:
-            return None
+            return [], Usage()
 
-        return Prediction(**r.json())
+        usage = Usage.model_validate(r.json().get("token_usage"))
+        added_messages = [
+            DialogueMessage.model_validate(m) for m in r.json().get("new_messages", [])
+        ]
+        return added_messages, usage
 
     async def apredict_history(
         self,
         unique_id: str,
         placeholders: dict | None = None,
-        custom_log_info: dict | None = None,
+        additional_log_info: dict | None = None,
         source: str | None = None,
-    ) -> Prediction | None:
-        """Get answer from AI by unique_id.
-        None means API refused to answer"""
+    ) -> tuple[list[DialogueMessage], Usage]:
+        """Get answer from AI by unique_id. Returns new messages and token usage."""
 
         r = await self._async_request(
             method="POST",
-            path="/api/v1/history/predict",
-            params={"unique_id": unique_id},
+            path=f"/api/v1/dialogue/{unique_id}/predict",
             body_json={
                 "placeholders": self._get_placeholders(placeholders),
-                "custom_log_info": self._get_custom_log_info(custom_log_info),
+                "custom_log_info": self._get_custom_log_info(additional_log_info),
                 "source": source or self.source,
             },
         )
 
         if r.status_code == 202:
-            return None
+            return [], Usage()
 
-        return Prediction(**r.json())
+        usage = Usage.model_validate(r.json().get("token_usage"))
+        added_messages = [
+            DialogueMessage.model_validate(m) for m in r.json().get("new_messages", [])
+        ]
+        return added_messages, usage
 
     def predict_history_add_message(
         self,
@@ -214,9 +221,8 @@ class Suvvy(object):
         placeholders: dict | None = None,
         custom_log_info: dict | None = None,
         source: str | None = None,
-    ) -> Prediction | None:
-        """Add message and get answer from AI by unique_id.
-        None means API refused to answer"""
+    ) -> tuple[list[DialogueMessage], Usage]:
+        """Add message and get answer from AI by unique_id. Returns new messages and token usage."""
 
         if not isinstance(message, list):
             message = [message]
@@ -224,8 +230,7 @@ class Suvvy(object):
 
         r = self._sync_request(
             method="POST",
-            path="/api/v1/history/message/predict",
-            params={"unique_id": unique_id},
+            path=f"/api/v1/dialogue/{unique_id}/predict/add_message",
             body_json={
                 "placeholders": self._get_placeholders(placeholders),
                 "custom_log_info": self._get_custom_log_info(custom_log_info),
@@ -235,9 +240,13 @@ class Suvvy(object):
         )
 
         if r.status_code == 202:
-            return None
+            return [], Usage()
 
-        return Prediction(**r.json())
+        usage = Usage.model_validate(r.json().get("token_usage"))
+        added_messages = [
+            DialogueMessage.model_validate(m) for m in r.json().get("new_messages", [])
+        ]
+        return added_messages, usage
 
     async def apredict_history_add_message(
         self,
@@ -246,9 +255,8 @@ class Suvvy(object):
         placeholders: dict | None = None,
         custom_log_info: dict | None = None,
         source: str | None = None,
-    ) -> Prediction | None:
-        """Add message and get answer from AI by unique_id.
-        None means API refused to answer"""
+    ) -> tuple[list[DialogueMessage], Usage]:
+        """Add message and get answer from AI by unique_id. Returns new messages and token usage."""
 
         if not isinstance(message, list):
             message = [message]
@@ -256,8 +264,7 @@ class Suvvy(object):
 
         r = await self._async_request(
             method="POST",
-            path="/api/v1/history/message/predict",
-            params={"unique_id": unique_id},
+            path=f"/api/v1/dialogue/{unique_id}/predict/add_message",
             body_json={
                 "placeholders": self._get_placeholders(placeholders),
                 "custom_log_info": self._get_custom_log_info(custom_log_info),
@@ -267,9 +274,13 @@ class Suvvy(object):
         )
 
         if r.status_code == 202:
-            return None
+            return [], Usage()
 
-        return Prediction(**r.json())
+        usage = Usage.model_validate(r.json().get("token_usage"))
+        added_messages = [
+            DialogueMessage.model_validate(m) for m in r.json().get("new_messages", [])
+        ]
+        return added_messages, usage
 
     def as_history(self, unique_id: str) -> "History":  # type: ignore
         """Represent history as a History object"""
