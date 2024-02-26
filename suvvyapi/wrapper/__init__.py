@@ -226,7 +226,12 @@ class Suvvy(object):
     ) -> tuple[list[DialogueMessage], Usage]:
         """Add message and get answer from AI by unique_id. Returns new messages and token usage."""
         if isinstance(message, str):
-            message = [Message(message_sender=SenderRole.CUSTOMER, message_data=TextMessageData(content=message))]
+            message = [
+                Message(
+                    message_sender=SenderRole.CUSTOMER,
+                    message_data=TextMessageData(content=message),
+                )
+            ]
         elif not isinstance(message, list):
             message = [message]
         message = [m.model_dump() for m in message]
@@ -261,7 +266,12 @@ class Suvvy(object):
     ) -> tuple[list[DialogueMessage], Usage]:
         """Add message and get answer from AI by unique_id. Returns new messages and token usage."""
         if isinstance(message, str):
-            message = [Message(message_sender=SenderRole.CUSTOMER, message_data=TextMessageData(content=message))]
+            message = [
+                Message(
+                    message_sender=SenderRole.CUSTOMER,
+                    message_data=TextMessageData(content=message),
+                )
+            ]
         elif not isinstance(message, list):
             message = [message]
         message = [m.model_dump() for m in message]
