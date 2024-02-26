@@ -70,10 +70,14 @@ class History(object):
         """Reset history"""
         return await self._suvvy.areset_dialogue(self.unique_id)
 
-    def add_message(self, message: list[Message] | Message) -> tuple[list[DialogueMessage], int]:
+    def add_message(
+        self, message: list[Message] | Message
+    ) -> tuple[list[DialogueMessage], int]:
         """Get history"""
         return self._suvvy.add_message_to_dialogue(self.unique_id, message)
 
-    async def async_add_message(self, message: list[Message] | Message) -> tuple[list[DialogueMessage], int]:
+    async def async_add_message(
+        self, message: list[Message] | Message
+    ) -> tuple[list[DialogueMessage], int]:
         """Get history"""
         return await self._suvvy.async_add_message_to_dialogue(self.unique_id, message)
