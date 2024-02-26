@@ -1,4 +1,6 @@
-from suvvyapi import Suvvy, Prediction, Message, ChatHistory
+from suvvyapi import Suvvy, Message, Usage
+from suvvyapi.models.dialogue import Dialogue
+from suvvyapi.models.message import DialogueMessage
 
 
 class History(object):
@@ -11,7 +13,7 @@ class History(object):
         placeholders: dict | None = None,
         custom_log_info: dict | None = None,
         source: str | None = None,
-    ) -> Prediction | None:
+    ) -> tuple[list[DialogueMessage], Usage]:
         """Get answer from AI"""
         return self._suvvy.predict_history(
             self.unique_id, placeholders, custom_log_info, source
@@ -22,7 +24,7 @@ class History(object):
         placeholders: dict | None = None,
         custom_log_info: dict | None = None,
         source: str | None = None,
-    ) -> Prediction | None:
+    ) -> tuple[list[DialogueMessage], Usage]:
         """Get answer from AI"""
         return await self._suvvy.apredict_history(
             self.unique_id, placeholders, custom_log_info, source
@@ -34,7 +36,7 @@ class History(object):
         placeholders: dict | None = None,
         custom_log_info: dict | None = None,
         source: str | None = None,
-    ) -> Prediction | None:
+    ) -> tuple[list[DialogueMessage], Usage]:
         """Add message and get answer from AI"""
         return self._suvvy.predict_history_add_message(
             self.unique_id, message, placeholders, custom_log_info, source
@@ -46,32 +48,32 @@ class History(object):
         placeholders: dict | None = None,
         custom_log_info: dict | None = None,
         source: str | None = None,
-    ) -> Prediction | None:
+    ) -> tuple[list[DialogueMessage], Usage]:
         """Add message and get answer from AI"""
         return await self._suvvy.apredict_history_add_message(
             self.unique_id, message, placeholders, custom_log_info, source
         )
 
-    def get(self) -> ChatHistory:
+    def get(self) -> Dialogue:
         """Get history"""
-        return self._suvvy.get_history(self.unique_id)
+        return self._suvvy.get_dialogue(self.unique_id)
 
-    async def aget(self) -> ChatHistory:
+    async def aget(self) -> Dialogue:
         """Get history"""
-        return await self._suvvy.aget_history(self.unique_id)
+        return await self._suvvy.aget_dialogue(self.unique_id)
 
-    def reset(self) -> ChatHistory:
+    def reset(self) -> Dialogue:
         """Reset history"""
-        return self._suvvy.reset_history(self.unique_id)
+        return self._suvvy.reset_dialogue(self.unique_id)
 
-    async def areset(self) -> ChatHistory:
+    async def areset(self) -> Dialogue:
         """Reset history"""
-        return await self._suvvy.areset_history(self.unique_id)
+        return await self._suvvy.areset_dialogue(self.unique_id)
 
-    def add_message(self, message: list[Message] | Message) -> ChatHistory:
+    def add_message(self, message: list[Message] | Message) -> tuple[list[DialogueMessage], int]:
         """Get history"""
-        return self._suvvy.add_message_to_history(self.unique_id, message)
+        return self._suvvy.add_message_to_dialogue(self.unique_id, message)
 
-    async def async_add_message(self, message: list[Message] | Message) -> ChatHistory:
+    async def async_add_message(self, message: list[Message] | Message) -> tuple[list[DialogueMessage], int]:
         """Get history"""
-        return await self._suvvy.async_add_message_to_history(self.unique_id, message)
+        return await self._suvvy.async_add_message_to_dialogue(self.unique_id, message)

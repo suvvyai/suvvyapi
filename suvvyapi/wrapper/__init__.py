@@ -99,26 +99,26 @@ class Suvvy(object):
         r = self._sync_request("GET", f"/api/v1/dialogue/{unique_id}/get")
         return Dialogue.model_validate(r.json())
 
-    async def aget_history(self, unique_id: str) -> Dialogue:
+    async def aget_dialogue(self, unique_id: str) -> Dialogue:
         """Get history by unique_id"""
         r = await self._async_request("GET", f"/api/v1/dialogue/{unique_id}/get")
         return Dialogue.model_validate(**r.json())
 
-    def reset_history(self, unique_id: str) -> Dialogue:
+    def reset_dialogue(self, unique_id: str) -> Dialogue:
         """Reset history by unique_id and return deleted history"""
         r = self._sync_request("PUT", f"/api/v1/dialogue/{unique_id}/delete")
         if r.status_code == 404:
             raise HistoryNotFoundError
         return Dialogue.model_validate(**r.json())
 
-    async def areset_history(self, unique_id: str) -> Dialogue:
+    async def areset_dialogue(self, unique_id: str) -> Dialogue:
         """Reset history by unique_id and return deleted history"""
         r = await self._async_request("PUT", f"/api/v1/dialogue/{unique_id}/delete")
         if r.status_code == 404:
             raise HistoryNotFoundError
         return Dialogue.model_validate(**r.json())
 
-    def add_message_to_history(
+    def add_message_to_dialogue(
         self, unique_id: str, message: list[Message] | Message
     ) -> tuple[list[DialogueMessage], int]:
         """Add message to history by unique_id. Returns new messages and used tokens"""
@@ -138,7 +138,7 @@ class Suvvy(object):
         ]
         return added_messages, used_tokens
 
-    async def async_add_message_to_history(
+    async def async_add_message_to_dialogue(
         self, unique_id: str, message: list[Message] | Message
     ) -> tuple[list[DialogueMessage], int]:
         """Add message to history by unique_id. Returns new messages and used tokens"""
