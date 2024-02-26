@@ -13,4 +13,3 @@ class Message(BaseModel):
 
 class RequestMessage(Message):
     message_sender: Literal[SenderRole.CUSTOMER, SenderRole.EMPLOYEE]
-    
