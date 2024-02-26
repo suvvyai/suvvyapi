@@ -1,7 +1,5 @@
 from pydantic import BaseModel
 
-from suvvyapi.models.history import HistoryMessage
-
 
 class TokenUsage(BaseModel):
     prompt_tokens: int = 0

@@ -13,7 +13,6 @@ from suvvyapi.exceptions.api import (
 )
 from suvvyapi.models.dialogue import Dialogue
 from suvvyapi.models.enums import SenderRole
-from suvvyapi.models.history import ChatHistory
 from suvvyapi.models.message import DialogueMessage
 from suvvyapi.models.message_data.text import TextMessageData
 
