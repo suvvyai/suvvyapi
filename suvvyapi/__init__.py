@@ -1,6 +1,6 @@
 from suvvyapi.models.message import Message
 from suvvyapi.models.token_usage import (
-    LLMResult,
+    Usage,
     TokenUsage,
     BalanceUsage,
 )
@@ -8,7 +8,7 @@ from suvvyapi.wrapper import Suvvy
 
 __all__ = [
     "Suvvy",
-    "LLMResult",
+    "Usage",
     "TokenUsage",
     "BalanceUsage",
     "Message",

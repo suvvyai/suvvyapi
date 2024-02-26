@@ -18,6 +18,6 @@ class BalanceUsage(BaseModel):
     token_multiplier: float = 1.0
 
 
-class LLMResult(BaseModel):
+class Usage(BaseModel):
     token_usage: TokenUsage = TokenUsage()
     balance_usage: BalanceUsage = BalanceUsage()
