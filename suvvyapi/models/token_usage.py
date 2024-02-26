@@ -21,15 +21,3 @@ class BalanceUsage(BaseModel):
 class LLMResult(BaseModel):
     token_usage: TokenUsage = TokenUsage()
     balance_usage: BalanceUsage = BalanceUsage()
-
-
-class Prediction(BaseModel):
-    generation_info: LLMResult = LLMResult()
-    new_messages: list[HistoryMessage] = []
-
-    @property
-    def actual_response(self) -> HistoryMessage | None:
-        if self.new_messages:
-            return self.new_messages[-1]
-        else:
-            return None
