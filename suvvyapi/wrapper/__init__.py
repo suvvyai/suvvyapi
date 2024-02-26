@@ -1,4 +1,5 @@
 from typing import Type
+from urllib.parse import quote
 
 import httpx
 
@@ -97,24 +98,30 @@ class Suvvy(object):
 
     def get_dialogue(self, unique_id: str) -> Dialogue:
         """Get dialogue by unique_id"""
-        r = self._sync_request("GET", f"/api/dialogue/{unique_id}/get")
+        r = self._sync_request("GET", f"/api/dialogue/{quote(unique_id, safe='')}/get")
         return Dialogue.model_validate(r.json())
 
     async def aget_dialogue(self, unique_id: str) -> Dialogue:
         """Get history by unique_id"""
-        r = await self._async_request("GET", f"/api/dialogue/{unique_id}/get")
+        r = await self._async_request(
+            "GET", f"/api/dialogue/{quote(unique_id, safe='')}/get"
+        )
         return Dialogue.model_validate(**r.json())
 
     def reset_dialogue(self, unique_id: str) -> Dialogue:
         """Reset history by unique_id and return deleted history"""
-        r = self._sync_request("PUT", f"/api/dialogue/{unique_id}/delete")
+        r = self._sync_request(
+            "PUT", f"/api/dialogue/{quote(unique_id, safe='')}/delete"
+        )
         if r.status_code == 404:
             raise HistoryNotFoundError
         return Dialogue.model_validate(**r.json())
 
     async def areset_dialogue(self, unique_id: str) -> Dialogue:
         """Reset history by unique_id and return deleted history"""
-        r = await self._async_request("PUT", f"/api/dialogue/{unique_id}/delete")
+        r = await self._async_request(
+            "PUT", f"/api/dialogue/{quote(unique_id, safe='')}/delete"
+        )
         if r.status_code == 404:
             raise HistoryNotFoundError
         return Dialogue.model_validate(**r.json())
@@ -129,7 +136,7 @@ class Suvvy(object):
 
         r = self._sync_request(
             "POST",
-            f"/api/dialogue/{unique_id}/messages/add",
+            f"/api/dialogue/{quote(unique_id, safe='')}/messages/add",
             body_json={"messages": message},
         )
         used_tokens = r.json().get("used_tokens", 0)
@@ -149,7 +156,7 @@ class Suvvy(object):
 
         r = await self._async_request(
             "POST",
-            f"/api/dialogue/{unique_id}/messages/add",
+            f"/api/dialogue/{quote(unique_id, safe='')}/messages/add",
             body_json={"messages": message},
         )
         used_tokens = r.json().get("used_tokens", 0)
@@ -170,7 +177,7 @@ class Suvvy(object):
 
         r = self._sync_request(
             method="POST",
-            path=f"/api/dialogue/{unique_id}/predict",
+            path=f"/api/dialogue/{quote(unique_id, safe='')}/predict",
             body_json={
                 "placeholders": self._get_placeholders(placeholders),
                 "custom_log_info": self._get_custom_log_info(additional_log_info),
@@ -198,7 +205,7 @@ class Suvvy(object):
 
         r = await self._async_request(
             method="POST",
-            path=f"/api/dialogue/{unique_id}/predict",
+            path=f"/api/dialogue/{quote(unique_id, safe='')}/predict",
             body_json={
                 "placeholders": self._get_placeholders(placeholders),
                 "custom_log_info": self._get_custom_log_info(additional_log_info),
@@ -237,7 +244,7 @@ class Suvvy(object):
 
         r = self._sync_request(
             method="POST",
-            path=f"/api/dialogue/{unique_id}/predict/add_message",
+            path=f"/api/dialogue/{quote(unique_id, safe='')}/predict/add_message",
             body_json={
                 "placeholders": self._get_placeholders(placeholders),
                 "custom_log_info": self._get_custom_log_info(custom_log_info),
@@ -277,7 +284,7 @@ class Suvvy(object):
 
         r = await self._async_request(
             method="POST",
-            path=f"/api/dialogue/{unique_id}/predict/add_message",
+            path=f"/api/dialogue/{quote(unique_id, safe='')}/predict/add_message",
             body_json={
                 "placeholders": self._get_placeholders(placeholders),
                 "custom_log_info": self._get_custom_log_info(custom_log_info),
