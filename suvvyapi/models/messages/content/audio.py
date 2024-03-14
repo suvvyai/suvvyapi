@@ -1,6 +1,7 @@
 from typing import Literal
 
 from suvvyapi.models.enums import ContentType
+from suvvyapi.models.files.file import Base64File
 from suvvyapi.models.messages.content.base import BaseMessageData
 from pydantic import BaseModel
 from pydantic.json_schema import SkipJsonSchema

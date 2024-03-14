@@ -4,14 +4,21 @@ from typing import Literal, Union
 from pydantic import BaseModel, UUID4, Field
 
 from suvvyapi.models.enums import SenderRole, ContentType
-from suvvyapi.models.message_data.text import TextMessageData
-from suvvyapi.models.message_data.tool import (
-    ToolResponseMessageData,
+from suvvyapi.models.messages.content.audio import AudioMessageData
+from suvvyapi.models.messages.content.event import EventMessageData
+from suvvyapi.models.messages.content.image import ImageMessageData
+from suvvyapi.models.messages.content.text import TextMessageData
+from suvvyapi.models.messages.content.tool_call import ToolCallsMessageData
+from suvvyapi.models.messages.content.tool_response import ToolResponseMessageData
+
+MessageDataUnion = Union[
+    TextMessageData,
+    ImageMessageData,
+    AudioMessageData,
     ToolCallsMessageData,
-)
-
-
-MessageDataUnion = Union[TextMessageData, ToolCallsMessageData, ToolResponseMessageData]
+    ToolResponseMessageData,
+    EventMessageData,
+]
 
 
 class Message(BaseModel):
