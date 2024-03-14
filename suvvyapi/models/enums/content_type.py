@@ -16,3 +16,6 @@ class ContentType(StrEnum):
 
     TOOL_RESPONSE = "tool_response"
     """Результат выполнения функции. Соответствует `ToolResponseMessageData`"""
+
+    EVENT = "event"
+    """Сообщения об изменении состояния диалога (разморозка, заморозка и т.п)"""
