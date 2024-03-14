@@ -1,3 +1,4 @@
+import json
 from typing import Type
 from urllib.parse import quote
 
@@ -30,6 +31,8 @@ def _handle_error(response: httpx.Response) -> None:
         404: HistoryNotFoundError,
         500: InternalAPIError,
     }
+    if response.status_code not in exceptions:
+        raise Exception(json.dumps(response.json(), indent=2, ensure_ascii=False))
     exception: Type[BaseException] = exceptions[response.status_code]  # type: ignore
     raise exception(response.json().get("detail", None))
 
