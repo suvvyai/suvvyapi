@@ -1,7 +1,7 @@
 from typing import Literal
 
+from suvvyapi.models.messages.content.base import BaseMessageData
 from suvvyapi.models.enums import ContentType
-from suvvyapi.models.message_data.base import BaseMessageData
 
 
 class TextMessageData(BaseMessageData):

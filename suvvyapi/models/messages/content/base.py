@@ -1,8 +1,7 @@
 from typing import Any
 
-from pydantic import BaseModel
-
 from suvvyapi.models.enums import ContentType
+from pydantic import BaseModel
 
 
 class BaseMessageData(BaseModel):

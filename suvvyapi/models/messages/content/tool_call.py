@@ -1,9 +1,9 @@
-from typing import Literal, Any
+from typing import Any, Literal
 
 from pydantic import BaseModel
 
+from suvvyapi.models.messages.content.base import BaseMessageData
 from suvvyapi.models.enums import ContentType
-from suvvyapi.models.message_data.base import BaseMessageData
 
 
 class ToolCallFunction(BaseModel):
@@ -21,17 +21,6 @@ class ToolCallsContent(BaseModel):
     tool_calls: list[ToolCall]
 
 
-class ToolResponseContent(BaseModel):
-    tool_call_id: str
-    tool_name: str | None = None
-    tool_response: str | dict[Any, Any] | list[Any]
-
-
 class ToolCallsMessageData(BaseMessageData):
     data_type: Literal[ContentType.TOOL_CALLS] = ContentType.TOOL_CALLS
     content: ToolCallsContent
-
-
-class ToolResponseMessageData(BaseMessageData):
-    data_type: Literal[ContentType.TOOL_RESPONSE] = ContentType.TOOL_RESPONSE
-    content: ToolResponseContent
